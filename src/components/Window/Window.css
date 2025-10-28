@@ -1,0 +1,21 @@
+.window {
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  min-height: 300px;
+}
+
+.window.maximized {
+  border-radius: 0;
+}
+
+.window-content {
+  flex: 1;
+  overflow: auto;
+  background: #fafafa;
+}

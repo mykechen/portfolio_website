@@ -1,0 +1,82 @@
+.resume-viewer {
+  padding: 40px;
+  background: white;
+}
+
+.resume-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.resume-content h1 {
+  font-size: 32px;
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.resume-content h2 {
+  font-size: 20px;
+  margin: 0 0 30px 0;
+  color: #666;
+  font-weight: normal;
+}
+
+.resume-content section {
+  margin-bottom: 30px;
+}
+
+.resume-content h3 {
+  font-size: 18px;
+  margin: 0 0 16px 0;
+  color: #333;
+  border-bottom: 2px solid #007aff;
+  padding-bottom: 8px;
+}
+
+.resume-item {
+  margin-bottom: 20px;
+}
+
+.resume-item h4 {
+  margin: 0 0 4px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.resume-item .company {
+  margin: 0;
+  color: #666;
+  font-weight: 500;
+}
+
+.resume-item .date {
+  margin: 4px 0 8px 0;
+  color: #999;
+  font-size: 14px;
+}
+
+.resume-item p {
+  margin: 8px 0 0 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.download-button {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.download-button a {
+  display: inline-block;
+  background: #007aff;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.download-button a:hover {
+  background: #0051d5;
+}
