@@ -1,13 +1,16 @@
 import React, { useState, useRef } from "react";
+import Draggable from "react-draggable";
 import "./DesktopIcon.css";
 
-const DesktopIcon = ({ icon, label, onDoubleClick }) => {
-  const [selected, setSelected] = useState(false);
+const DesktopIcon = ({ icon, label, initialPosition, onDoubleClick }) => {
+  const [position, setPosition] = useState(initialPosition || { x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
   const clickTimeoutRef = useRef(null);
+  const nodeRef = useRef(null);
 
   const handleClick = () => {
     clickTimeoutRef.current = setTimeout(() => {
-      setSelected(true);
+      // Just handle click, no selection
     }, 300);
   };
 
@@ -15,21 +18,48 @@ const DesktopIcon = ({ icon, label, onDoubleClick }) => {
     if (clickTimeoutRef.current) {
       clearTimeout(clickTimeoutRef.current);
     }
-    setSelected(false);
     onDoubleClick();
   };
 
+  const handleDragStart = () => {
+    setIsDragging(true);
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+  };
+
+  const handleDragStop = (e, data) => {
+    setIsDragging(false);
+    setPosition({ x: data.x, y: data.y });
+  };
+
+  const isImagePath = icon.startsWith("/");
+
   return (
-    <button
-      className={`desktop-icon ${selected ? "selected" : ""}`}
-      onClick={handleClick}
-      onDoubleClick={handleDoubleClick}
-      type="button"
-      aria-label={label}
+    <Draggable
+      nodeRef={nodeRef}
+      position={position}
+      onStart={handleDragStart}
+      onStop={handleDragStop}
     >
-      <div className="desktop-icon-image">{icon}</div>
-      <div className="desktop-icon-label">{label}</div>
-    </button>
+      <button
+        ref={nodeRef}
+        className={`desktop-icon ${isDragging ? "dragging" : ""}`}
+        onClick={handleClick}
+        onDoubleClick={handleDoubleClick}
+        type="button"
+        aria-label={label}
+      >
+        <div className="desktop-icon-image">
+          {isImagePath ? (
+            <img src={icon} alt={label} width="48" height="48" />
+          ) : (
+            icon
+          )}
+        </div>
+        <div className="desktop-icon-label">{label}</div>
+      </button>
+    </Draggable>
   );
 };
 

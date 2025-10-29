@@ -20,6 +20,8 @@ const Window = ({ id, title, content }) => {
 
   if (!window || window.minimized) return null;
 
+  const noTitleBar = window.noTitleBar || false;
+
   const handleClick = () => {
     bringToFront(id);
   };
@@ -43,23 +45,36 @@ const Window = ({ id, title, content }) => {
   if (window.maximized) {
     return (
       <motion.div
-        className="window maximized"
+        className={`window maximized ${noTitleBar ? "no-title-bar" : ""}`}
         style={{
           zIndex: window.zIndex,
         }}
         onClick={handleClick}
         initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        animate={{
+          scale: window.closing ? 0.9 : 1,
+          opacity: window.closing ? 0 : 1,
+        }}
         transition={{ duration: 0.2 }}
       >
-        <TitleBar
-          title={title}
-          onClose={() => closeWindow(id)}
-          onMinimize={() => minimizeWindow(id)}
-          onMaximize={() => maximizeWindow(id)}
-          maximized={window.maximized}
-        />
-        <div className="window-content">{content}</div>
+        {!noTitleBar && (
+          <TitleBar
+            title={title}
+            onClose={() => closeWindow(id)}
+            onMinimize={() => minimizeWindow(id)}
+            onMaximize={() => maximizeWindow(id)}
+            maximized={window.maximized}
+          />
+        )}
+        <div
+          className="window-content"
+          onClick={(e) => {
+            // Allow clicks within content to work normally, prevent window focus on content click
+            e.stopPropagation();
+          }}
+        >
+          {content}
+        </div>
       </motion.div>
     );
   }
@@ -70,26 +85,43 @@ const Window = ({ id, title, content }) => {
       size={{ width: window.size.width, height: window.size.height }}
       onDragStop={handleDragStop}
       onResizeStop={handleResizeStop}
-      bounds="window"
-      minWidth={400}
-      minHeight={300}
+      minWidth={noTitleBar ? window.size.width : 400}
+      minHeight={noTitleBar ? window.size.height : 300}
+      maxWidth={noTitleBar ? window.size.width : undefined}
+      maxHeight={noTitleBar ? window.size.height : undefined}
       style={{ zIndex: window.zIndex }}
+      dragHandleClassName={noTitleBar ? "" : "title-bar"}
+      disableResizing={window.closing || noTitleBar ? true : undefined}
+      disableDragging={window.closing ? true : undefined}
     >
       <motion.div
-        className="window"
+        className={`window ${noTitleBar ? "no-title-bar" : ""}`}
         onClick={handleClick}
         initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        animate={{
+          scale: window.closing ? 0.9 : 1,
+          opacity: window.closing ? 0 : 1,
+        }}
         transition={{ duration: 0.2 }}
       >
-        <TitleBar
-          title={title}
-          onClose={() => closeWindow(id)}
-          onMinimize={() => minimizeWindow(id)}
-          onMaximize={() => maximizeWindow(id)}
-          maximized={window.maximized}
-        />
-        <div className="window-content">{content}</div>
+        {!noTitleBar && (
+          <TitleBar
+            title={title}
+            onClose={() => closeWindow(id)}
+            onMinimize={() => minimizeWindow(id)}
+            onMaximize={() => maximizeWindow(id)}
+            maximized={window.maximized}
+          />
+        )}
+        <div
+          className="window-content"
+          onClick={(e) => {
+            // Allow clicks within content to work normally, prevent window focus on content click
+            e.stopPropagation();
+          }}
+        >
+          {content}
+        </div>
       </motion.div>
     </Rnd>
   );

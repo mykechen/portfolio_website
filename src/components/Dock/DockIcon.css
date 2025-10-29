@@ -81,13 +81,4 @@
   opacity: 1;
 }
 
-/* Magnification effect for adjacent icons */
-.dock-icon:nth-child(n + 2):has(+ .dock-icon:hover),
-.dock-icon:has(+ .dock-icon:hover) {
-  transform: translateY(-10px) scale(1.1);
-}
-
-.dock-icon:nth-child(n + 3):has(+ .dock-icon:hover) ~ .dock-icon:hover,
-.dock-icon:hover ~ .dock-icon {
-  transform: translateY(-8px) scale(1.05);
-}
+/* Removed magnification effect for adjacent icons - only hovered icon magnifies */

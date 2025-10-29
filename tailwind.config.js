@@ -5,10 +5,13 @@ export default {
     extend: {
       fontFamily: {
         sans: [
+          "SF Pro Display",
+          "SF Pro Text",
           "-apple-system",
           "BlinkMacSystemFont",
-          "SF Pro Display",
           "Helvetica Neue",
+          "Helvetica",
+          "Arial",
           "sans-serif",
         ],
       },

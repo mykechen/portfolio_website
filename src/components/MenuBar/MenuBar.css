@@ -32,10 +32,85 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
+  background: transparent;
+  border: none;
 }
 
 .menu-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Remove hover effect and cursor from right side menu items */
+.menu-bar-right .menu-item {
+  cursor: default;
+}
+
+.menu-bar-right .menu-item:hover {
+  background-color: transparent;
+}
+
+.menu-item-with-dropdown {
+  position: relative;
+}
+
+/* Remove hover effect from the dropdown container, only the button should highlight */
+.menu-item-with-dropdown:hover {
+  background-color: transparent;
+}
+
+.menu-item-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: #000;
+}
+
+.menu-item-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 120px;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 13px;
+  color: #000;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(0, 122, 255, 0.1);
+}
+
+.dropdown-item .menu-text {
+  display: block;
 }
 
 .apple-logo {
@@ -49,8 +124,22 @@
 }
 
 .menu-icon {
-  color: #000;
+  display: block;
+  object-fit: contain;
+}
+
+.menu-bar-right .menu-icon {
   cursor: default;
+}
+
+.battery-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.battery-icon svg {
+  display: block;
 }
 
 .clock {

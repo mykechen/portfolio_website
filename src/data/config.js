@@ -1,14 +1,11 @@
-// Portfolio configuration
-// Customize this file with your personal information
-
 export const personalInfo = {
   name: "Myke Angelo Chen",
   title: "Software Engineer",
-  email: "your.email@example.com",
-  github: "https://github.com/yourusername",
-  linkedin: "https://linkedin.com/in/yourusername",
+  email: "mykechen@usc.edu",
+  github: "https://github.com/mykechen",
+  linkedin: "https://www.linkedin.com/in/myke-angelo-chen/",
   spotify: "https://open.spotify.com/user/youruserid",
-  location: "San Francisco, CA",
+  location: "Los Angeles, CA",
 };
 
 export const about = {

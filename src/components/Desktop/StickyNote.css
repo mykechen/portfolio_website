@@ -1,0 +1,97 @@
+.sticky-note {
+  position: absolute;
+  width: 260px;
+  min-height: 400px;
+  background: #fef9c3;
+  border: 1px solid #eab308;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: grab;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  transform: perspective(1000px) rotateX(2deg) rotateY(-1deg);
+  transition: box-shadow 0.2s;
+}
+
+.sticky-note:hover:not(.dragging) {
+  transform: perspective(1000px) rotateX(1deg) rotateY(-0.5deg) translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.sticky-note.dragging {
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  cursor: grabbing;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.sticky-note-header {
+  padding: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.sticky-note-header-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.sticky-note-header .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.sticky-note-content {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sticky-note-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sticky-note-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+  font-family: "SF Pro Display", "SF Pro Text", -apple-system,
+    BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.sticky-note-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.sticky-note-list li {
+  font-size: 13px;
+  color: #000;
+  line-height: 1.5;
+  padding-left: 16px;
+  position: relative;
+  font-family: "SF Pro Display", "SF Pro Text", -apple-system,
+    BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.sticky-note-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #000;
+}

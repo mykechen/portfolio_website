@@ -5,18 +5,16 @@
   display: flex;
   align-items: center;
   padding-left: 8px;
-  cursor: grab;
+  cursor: default;
   -webkit-app-region: drag;
-}
-
-.title-bar:active {
-  cursor: grabbing;
 }
 
 .traffic-lights {
   display: flex;
   gap: 8px;
   margin-right: 8px;
+  pointer-events: auto;
+  -webkit-app-region: no-drag;
 }
 
 .traffic-light {
@@ -27,6 +25,8 @@
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
+  pointer-events: auto;
+  -webkit-app-region: no-drag;
 }
 
 .traffic-light-close {

@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Apple, Wifi, Battery, Clock, Search, Radio } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { useWindowManager } from "../../context/WindowManagerContext";
+import ContactContent from "../Apps/Finder/ContactContent";
+import { IoBatteryFull } from "react-icons/io5";
 import "./MenuBar.css";
 
 const MenuBar = () => {
   const [time, setTime] = useState(new Date());
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showResumeDropdown, setShowResumeDropdown] = useState(false);
+  const { openWindow } = useWindowManager();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -14,12 +17,64 @@ const MenuBar = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Close dropdowns when clicking outside
+  const resumeMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        resumeMenuRef.current &&
+        !resumeMenuRef.current.contains(event.target)
+      ) {
+        setShowResumeDropdown(false);
+      }
+    };
+
+    if (showResumeDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showResumeDropdown]);
+
+  const handleResumeClick = (type) => {
+    if (type === "swe") {
+      window.open("/Myke Chen Resume SWE.pdf", "_blank");
+    } else if (type === "pm") {
+      window.open("/Myke Chen Resume PM.pdf", "_blank");
+    }
+    setShowResumeDropdown(false);
+  };
+
   const formatTime = (date) => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const day = days[date.getDay()];
+    const month = months[date.getMonth()];
+    const dayOfMonth = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const displayHours = hours % 12 || 12;
+    const displayMinutes = minutes.toString().padStart(2, "0");
+
+    return `${day} ${month} ${dayOfMonth} ${displayHours}:${displayMinutes} ${ampm}`;
   };
 
   return (
@@ -27,28 +82,115 @@ const MenuBar = () => {
       <div className="menu-bar-left">
         <button
           className="menu-item apple-logo"
-          onClick={() => setShowDropdown(!showDropdown)}
-          aria-label="Apple menu"
+          onClick={() => window.location.reload()}
+          aria-label="Refresh page"
         >
-          <Apple size={16} />
+          <img src="/icons/apple_logo.png" alt="Apple" width="16" height="16" />
         </button>
-        <div className="menu-item">
+        <button
+          className="menu-item"
+          onClick={() => window.location.reload()}
+          aria-label="Refresh page"
+        >
           <span className="menu-text">Myke Angelo Chen's Portfolio</span>
-        </div>
-        <div className="menu-item">
+        </button>
+        <button
+          className="menu-item"
+          onClick={() =>
+            openWindow({
+              title: "Contact Me",
+              windowType: "contact",
+              content: <ContactContent />,
+              size: { width: 750, height: 500 },
+            })
+          }
+          aria-label="Contact"
+        >
           <span className="menu-text">Contact</span>
+        </button>
+        <div
+          ref={resumeMenuRef}
+          className="menu-item menu-item-with-dropdown"
+          style={{ position: "relative" }}
+        >
+          <button
+            className="menu-item-button"
+            onClick={() => setShowResumeDropdown(!showResumeDropdown)}
+            aria-label="Resume"
+          >
+            <span className="menu-text">Resume</span>
+          </button>
+          {showResumeDropdown && (
+            <div className="menu-dropdown">
+              <button
+                className="dropdown-item"
+                onClick={() => handleResumeClick("swe")}
+              >
+                <span className="menu-text">SWE</span>
+              </button>
+              <button
+                className="dropdown-item"
+                onClick={() => handleResumeClick("pm")}
+              >
+                <span className="menu-text">PM</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="menu-bar-right">
-        <Wifi size={16} className="menu-icon" />
-        <Battery size={16} className="menu-icon" />
+        <div className="menu-item battery-icon" aria-label="Battery">
+          <IoBatteryFull size={16} />
+        </div>
+        <div className="menu-item" aria-label="WiFi">
+          <img
+            src="/icons/wifi_icon.png"
+            alt="WiFi"
+            width="14"
+            height="14"
+            className="menu-icon"
+          />
+        </div>
+        <div className="menu-item" aria-label="Search">
+          <img
+            src="/icons/search_icon.png"
+            alt="Search"
+            width="14"
+            height="14"
+            className="menu-icon"
+          />
+        </div>
+        <div className="menu-item" aria-label="Profile">
+          <img
+            src="/icons/profile_icon.png"
+            alt="Profile"
+            width="14"
+            height="14"
+            className="menu-icon"
+          />
+        </div>
+        <div className="menu-item" aria-label="Control Center">
+          <img
+            src="/icons/control_center_icon.png"
+            alt="Control Center"
+            width="14"
+            height="14"
+            className="menu-icon"
+          />
+        </div>
+        <div className="menu-item" aria-label="Siri">
+          <img
+            src="/icons/siri_icon.png"
+            alt="Siri"
+            width="14"
+            height="14"
+            className="menu-icon"
+          />
+        </div>
         <div className="menu-item clock">
-          <Clock size={16} />
           <span className="menu-text">{formatTime(time)}</span>
         </div>
-        <Search size={16} className="menu-icon" />
-        <Radio size={16} className="menu-icon" />
       </div>
     </div>
   );

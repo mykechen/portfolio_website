@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+} from "react";
 
 const WindowManagerContext = createContext();
 
@@ -15,28 +22,99 @@ export const useWindowManager = () => {
 const WindowManagerProvider = ({ children }) => {
   const [windows, setWindows] = useState([]);
   const [nextZIndex, setNextZIndex] = useState(1000);
+  const windowsRef = useRef([]);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    windowsRef.current = windows;
+  }, [windows]);
 
   const openWindow = (windowConfig) => {
-    const newWindow = {
-      id: Date.now(),
-      ...windowConfig,
-      zIndex: nextZIndex,
-      minimized: false,
-      maximized: false,
-      position: windowConfig.position || {
-        x: 50 + windows.length * 30,
-        y: 50 + windows.length * 30,
-      },
-      size: windowConfig.size || { width: 800, height: 600 },
-    };
+    // Check if a window of this type already exists (using ref for synchronous access)
+    if (windowConfig.windowType) {
+      const existingWindow = windowsRef.current.find(
+        (w) => w.windowType === windowConfig.windowType && !w.closing
+      );
 
-    setWindows([...windows, newWindow]);
-    setNextZIndex(nextZIndex + 1);
-    return newWindow.id;
+      if (existingWindow) {
+        // Window of this type exists, bring it to front and un-minimize
+        const currentZIndex = nextZIndex;
+        setNextZIndex((prev) => prev + 1);
+        setWindows((prevWindows) =>
+          prevWindows.map((w) =>
+            w.id === existingWindow.id
+              ? {
+                  ...w,
+                  zIndex: currentZIndex,
+                  minimized: false,
+                }
+              : w
+          )
+        );
+        return existingWindow.id;
+      }
+    }
+
+    // No existing window found, create a new one
+    const windowId = Date.now() + Math.random();
+    const currentZIndex = nextZIndex;
+
+    setWindows((prevWindows) => {
+      // Calculate centered position if not provided
+      const windowSize = windowConfig.size || { width: 800, height: 600 };
+      const menuBarHeight = 28;
+
+      const centeredPosition = windowConfig.position || {
+        x: (window.innerWidth - windowSize.width) / 2,
+        y:
+          (window.innerHeight - windowSize.height - menuBarHeight) / 2 +
+          menuBarHeight,
+      };
+
+      const newWindow = {
+        id: windowId,
+        ...windowConfig,
+        zIndex: currentZIndex,
+        minimized: false,
+        maximized: false,
+        closing: false,
+        position: centeredPosition,
+        size: windowSize,
+      };
+      return [...prevWindows, newWindow];
+    });
+    setNextZIndex((prev) => prev + 1);
+    return windowId;
   };
 
   const closeWindow = (windowId) => {
-    setWindows(windows.filter((w) => w.id !== windowId));
+    setWindows((prevWindows) => {
+      const windowToClose = prevWindows.find((w) => w.id === windowId);
+
+      if (!windowToClose) return prevWindows;
+
+      // Mark windows as closing
+      const windowsToClose = windowToClose?.groupId
+        ? prevWindows.filter((w) => w.groupId === windowToClose.groupId)
+        : [windowToClose];
+
+      // Set closing flag for all windows to be closed
+      const updatedWindows = prevWindows.map((w) =>
+        windowsToClose.includes(w) ? { ...w, closing: true } : w
+      );
+
+      // After animation duration, actually remove the windows
+      setTimeout(() => {
+        setWindows((prev) => {
+          if (windowToClose?.groupId) {
+            return prev.filter((w) => w.groupId !== windowToClose.groupId);
+          }
+          return prev.filter((w) => w.id !== windowId);
+        });
+      }, 200); // Match animation duration
+
+      return updatedWindows;
+    });
   };
 
   const minimizeWindow = (windowId) => {
