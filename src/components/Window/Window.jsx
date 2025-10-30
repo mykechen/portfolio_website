@@ -1,20 +1,22 @@
 import React from "react";
 import { Rnd } from "react-rnd";
 import { motion } from "framer-motion";
-import { useWindowManager } from "../../context/WindowManagerContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  closeWindow,
+  minimizeWindow,
+  maximizeWindow,
+  bringToFront,
+  updateWindowPosition,
+  updateWindowSize,
+  removeWindow,
+} from "../../store/windowManagerSlice";
 import TitleBar from "./TitleBar";
 import "./Window.css";
 
 const Window = ({ id, title, content }) => {
-  const {
-    closeWindow,
-    minimizeWindow,
-    maximizeWindow,
-    bringToFront,
-    updateWindowPosition,
-    updateWindowSize,
-    windows,
-  } = useWindowManager();
+  const dispatch = useAppDispatch();
+  const windows = useAppSelector((state) => state.windowManager.windows);
 
   const window = windows.find((w) => w.id === id);
 
@@ -23,23 +25,42 @@ const Window = ({ id, title, content }) => {
   const noTitleBar = window.noTitleBar || false;
 
   const handleClick = () => {
-    bringToFront(id);
+    dispatch(bringToFront(id));
   };
 
   const handleDragStop = (e, d) => {
     if (!window.maximized) {
-      updateWindowPosition(id, { x: d.x, y: d.y });
+      dispatch(
+        updateWindowPosition({ windowId: id, position: { x: d.x, y: d.y } })
+      );
     }
   };
 
-  const handleResizeStop = (e, direction, ref, delta, position) => {
+  const handleClose = () => {
+    dispatch(closeWindow(id));
+    // Remove window after animation (handle groups if needed)
+    setTimeout(() => {
+      dispatch(removeWindow(id));
+    }, 200);
+  };
+
+  const updateResizeState = (ref, position) => {
     if (!window.maximized) {
-      updateWindowSize(id, {
-        width: ref.style.width,
-        height: ref.style.height,
-      });
-      updateWindowPosition(id, position);
+      // Extract numeric values from style string (e.g., "800px" -> 800)
+      const width = Number.parseInt(ref.style.width, 10) || ref.offsetWidth;
+      const height = Number.parseInt(ref.style.height, 10) || ref.offsetHeight;
+
+      dispatch(updateWindowSize({ windowId: id, size: { width, height } }));
+      dispatch(updateWindowPosition({ windowId: id, position }));
     }
+  };
+
+  const handleResize = (e, direction, ref, delta, position) => {
+    updateResizeState(ref, position);
+  };
+
+  const handleResizeStop = (e, direction, ref, delta, position) => {
+    updateResizeState(ref, position);
   };
 
   if (window.maximized) {
@@ -60,9 +81,9 @@ const Window = ({ id, title, content }) => {
         {!noTitleBar && (
           <TitleBar
             title={title}
-            onClose={() => closeWindow(id)}
-            onMinimize={() => minimizeWindow(id)}
-            onMaximize={() => maximizeWindow(id)}
+            onClose={handleClose}
+            onMinimize={() => dispatch(minimizeWindow(id))}
+            onMaximize={() => dispatch(maximizeWindow(id))}
             maximized={window.maximized}
           />
         )}
@@ -84,6 +105,7 @@ const Window = ({ id, title, content }) => {
       position={{ x: window.position.x, y: window.position.y }}
       size={{ width: window.size.width, height: window.size.height }}
       onDragStop={handleDragStop}
+      onResize={handleResize}
       onResizeStop={handleResizeStop}
       minWidth={noTitleBar ? window.size.width : 400}
       minHeight={noTitleBar ? window.size.height : 300}
@@ -93,6 +115,20 @@ const Window = ({ id, title, content }) => {
       dragHandleClassName={noTitleBar ? "" : "title-bar"}
       disableResizing={window.closing || noTitleBar ? true : undefined}
       disableDragging={window.closing ? true : undefined}
+      enableResizing={
+        window.closing || noTitleBar
+          ? {}
+          : {
+              top: true,
+              right: true,
+              bottom: true,
+              left: true,
+              topRight: true,
+              bottomRight: true,
+              bottomLeft: true,
+              topLeft: true,
+            }
+      }
     >
       <motion.div
         className={`window ${noTitleBar ? "no-title-bar" : ""}`}
@@ -107,9 +143,9 @@ const Window = ({ id, title, content }) => {
         {!noTitleBar && (
           <TitleBar
             title={title}
-            onClose={() => closeWindow(id)}
-            onMinimize={() => minimizeWindow(id)}
-            onMaximize={() => maximizeWindow(id)}
+            onClose={handleClose}
+            onMinimize={() => dispatch(minimizeWindow(id))}
+            onMaximize={() => dispatch(maximizeWindow(id))}
             maximized={window.maximized}
           />
         )}

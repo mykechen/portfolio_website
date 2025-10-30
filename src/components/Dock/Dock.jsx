@@ -1,12 +1,14 @@
 import React from "react";
 import DockIcon from "./DockIcon";
-import { useWindowManager } from "../../context/WindowManagerContext";
+import { useAppDispatch } from "../../store/hooks";
+import { openWindow } from "../../store/windowManagerSlice";
 import SpotifyPlaylistContent from "../Apps/Finder/SpotifyPlaylistContent";
 import ContactContent from "../Apps/Finder/ContactContent";
+import PhotosContent from "../Apps/Finder/PhotosContent";
 import "./Dock.css";
 
 const Dock = () => {
-  const { openWindow } = useWindowManager();
+  const dispatch = useAppDispatch();
 
   const dockItems = [
     {
@@ -14,44 +16,76 @@ const Dock = () => {
       icon: "/icons/finder.png",
       label: "Finder",
       action: () =>
-        openWindow({
-          title: "Finder",
-          content: <div className="p-6 text-center">Finder window</div>,
-          size: { width: 800, height: 600 },
-        }),
+        dispatch(
+          openWindow({
+            title: "Finder",
+            content: <div className="p-6 text-center">Finder window</div>,
+            size: { width: 800, height: 600 },
+          })
+        ),
     },
     {
       id: "safari",
       icon: "/icons/safari_icon.png",
       label: "Safari",
       action: () =>
-        openWindow({
-          title: "Safari",
-          content: <div className="p-6 text-center">Safari window</div>,
-          size: { width: 800, height: 600 },
-        }),
+        dispatch(
+          openWindow({
+            title: "Safari",
+            content: <div className="p-6 text-center">Safari window</div>,
+            size: { width: 800, height: 600 },
+          })
+        ),
     },
     {
       id: "photos",
       icon: "/icons/photos_icon.png",
       label: "Photos",
-      action: () =>
-        openWindow({
-          title: "Photos",
-          content: <div className="p-6 text-center">Photos gallery</div>,
-          size: { width: 900, height: 700 },
-        }),
+      action: () => {
+        const menuBarHeight = 28;
+        const dockHeight = 80;
+        const dockBottomOffset = 20; // Dock is positioned 20px from bottom
+        const paddingTop = 20;
+        const paddingBottom = 20;
+
+        // Calculate available space
+        const windowTop = menuBarHeight + paddingTop;
+        const dockTop = window.innerHeight - dockBottomOffset - dockHeight;
+        const maxWindowHeight = dockTop - paddingBottom - windowTop;
+
+        // Use 50% of available space, ensure it's a valid number
+        const windowHeight = Math.max(400, Math.round(maxWindowHeight * 0.5));
+
+        // Set a reasonable default width, but allow resizing
+        const defaultWidth = 1200;
+        const windowWidth = Math.min(defaultWidth, window.innerWidth * 0.9);
+
+        dispatch(
+          openWindow({
+            title: "Photos",
+            windowType: "photos",
+            content: <PhotosContent />,
+            size: { width: Math.round(windowWidth), height: windowHeight },
+            position: {
+              x: Math.round((window.innerWidth - windowWidth) / 2),
+              y: windowTop,
+            },
+          })
+        );
+      },
     },
     {
       id: "messages",
       icon: "/icons/messages.png",
       label: "Messages",
       action: () =>
-        openWindow({
-          title: "Messages",
-          content: <div className="p-6 text-center">Contact form</div>,
-          size: { width: 700, height: 600 },
-        }),
+        dispatch(
+          openWindow({
+            title: "Messages",
+            content: <div className="p-6 text-center">Contact form</div>,
+            size: { width: 700, height: 600 },
+          })
+        ),
     },
     {
       id: "mail",
@@ -64,12 +98,14 @@ const Dock = () => {
       icon: "/icons/contacts_icon.png",
       label: "Contact",
       action: () =>
-        openWindow({
-          title: "Contact Me",
-          windowType: "contact",
-          content: <ContactContent />,
-          size: { width: 750, height: 500 },
-        }),
+        dispatch(
+          openWindow({
+            title: "Contact Me",
+            windowType: "contact",
+            content: <ContactContent />,
+            size: { width: 750, height: 500 },
+          })
+        ),
     },
     {
       id: "github",
@@ -94,17 +130,19 @@ const Dock = () => {
         const windowHeight = 600;
         const padding = 20;
 
-        openWindow({
-          title: "vibing",
-          windowType: "spotify-playlist",
-          content: <SpotifyPlaylistContent />,
-          size: { width: windowWidth, height: windowHeight },
-          position: {
-            x: window.innerWidth - windowWidth - padding,
-            y: window.innerHeight - dockHeight - windowHeight - padding,
-          },
-          noTitleBar: true,
-        });
+        dispatch(
+          openWindow({
+            title: "vibing",
+            windowType: "spotify-playlist",
+            content: <SpotifyPlaylistContent />,
+            size: { width: windowWidth, height: windowHeight },
+            position: {
+              x: window.innerWidth - windowWidth - padding,
+              y: window.innerHeight - dockHeight - windowHeight - padding,
+            },
+            noTitleBar: true,
+          })
+        );
       },
     },
     {

@@ -1,0 +1,100 @@
+.photos-content {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background: #fafafa;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+.photos-masonry {
+  column-count: 5;
+  column-gap: 16px;
+  column-fill: balance;
+  width: 100%;
+}
+
+.photos-masonry-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.photos-masonry-item:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.photos-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Expanded image overlay */
+.photos-expanded-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  cursor: pointer;
+}
+
+.photos-expanded-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.photos-expanded-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 100001;
+  color: #000;
+  font-weight: 300;
+}
+
+.photos-expanded-close:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.photos-expanded-image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}

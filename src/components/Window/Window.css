@@ -34,7 +34,82 @@
 
 .window-content {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
   background: #fafafa;
   cursor: default;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* React-rnd resize handles */
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  z-index: 1000;
+}
+
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: nwse-resize;
+}
+
+.react-resizable-handle-sw {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+}
+
+.react-resizable-handle-nw {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+}
+
+.react-resizable-handle-ne {
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+}
+
+.react-resizable-handle-w,
+.react-resizable-handle-e {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  cursor: ew-resize;
+}
+
+.react-resizable-handle-w {
+  left: 0;
+}
+
+.react-resizable-handle-e {
+  right: 0;
+}
+
+.react-resizable-handle-n,
+.react-resizable-handle-s {
+  left: 50%;
+  transform: translateX(-50%);
+  height: 10px;
+}
+
+.react-resizable-handle-n {
+  top: 0;
+  cursor: ns-resize;
+}
+
+.react-resizable-handle-s {
+  bottom: 0;
+  cursor: ns-resize;
+}
+
+/* Hover effect for resize handles */
+.react-resizable-handle:hover {
+  background: rgba(0, 122, 255, 0.2);
+  border-radius: 2px;
 }

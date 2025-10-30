@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useWindowManager } from "../../context/WindowManagerContext";
+import { useAppDispatch } from "../../store/hooks";
+import { openWindow } from "../../store/windowManagerSlice";
 import ContactContent from "../Apps/Finder/ContactContent";
 import { IoBatteryFull } from "react-icons/io5";
 import "./MenuBar.css";
@@ -7,7 +8,7 @@ import "./MenuBar.css";
 const MenuBar = () => {
   const [time, setTime] = useState(new Date());
   const [showResumeDropdown, setShowResumeDropdown] = useState(false);
-  const { openWindow } = useWindowManager();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -97,12 +98,14 @@ const MenuBar = () => {
         <button
           className="menu-item"
           onClick={() =>
-            openWindow({
-              title: "Contact Me",
-              windowType: "contact",
-              content: <ContactContent />,
-              size: { width: 750, height: 500 },
-            })
+            dispatch(
+              openWindow({
+                title: "Contact Me",
+                windowType: "contact",
+                content: <ContactContent />,
+                size: { width: 750, height: 500 },
+              })
+            )
           }
           aria-label="Contact"
         >

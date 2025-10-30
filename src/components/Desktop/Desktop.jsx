@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { useWindowManager } from "../../context/WindowManagerContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { openWindow } from "../../store/windowManagerSlice";
 import DesktopIcon from "./DesktopIcon";
 import Window from "../Window/Window";
 import Dock from "../Dock/Dock";
@@ -11,7 +12,8 @@ import ImageViewer from "../Apps/Finder/ImageViewer";
 import "./Desktop.css";
 
 const Desktop = () => {
-  const { windows, openWindow } = useWindowManager();
+  const dispatch = useAppDispatch();
+  const windows = useAppSelector((state) => state.windowManager.windows);
 
   // Generate random positions within screen bounds
   const generateRandomPosition = (index) => {
@@ -87,33 +89,41 @@ const Desktop = () => {
 
   const handleDoubleClick = (type) => {
     if (type === "project1") {
-      openWindow({
-        title: "Project1",
-        windowType: "project1",
-        content: <ProjectsContent />,
-        size: { width: 900, height: 700 },
-      });
+      dispatch(
+        openWindow({
+          title: "Project1",
+          windowType: "project1",
+          content: <ProjectsContent />,
+          size: { width: 900, height: 700 },
+        })
+      );
     } else if (type === "project2") {
-      openWindow({
-        title: "Project2",
-        windowType: "project2",
-        content: <ProjectsContent />,
-        size: { width: 900, height: 700 },
-      });
+      dispatch(
+        openWindow({
+          title: "Project2",
+          windowType: "project2",
+          content: <ProjectsContent />,
+          size: { width: 900, height: 700 },
+        })
+      );
     } else if (type === "project3") {
-      openWindow({
-        title: "Project3",
-        windowType: "project3",
-        content: <ProjectsContent />,
-        size: { width: 900, height: 700 },
-      });
+      dispatch(
+        openWindow({
+          title: "Project3",
+          windowType: "project3",
+          content: <ProjectsContent />,
+          size: { width: 900, height: 700 },
+        })
+      );
     } else if (type === "certifications") {
-      openWindow({
-        title: "Certifications",
-        windowType: "certifications",
-        content: <CertificationsContent />,
-        size: { width: 900, height: 700 },
-      });
+      dispatch(
+        openWindow({
+          title: "Certifications",
+          windowType: "certifications",
+          content: <CertificationsContent />,
+          size: { width: 900, height: 700 },
+        })
+      );
     } else if (type === "about") {
       // Generate a unique group ID for all About Me windows
       const aboutGroupId = `about-${Date.now()}`;
@@ -209,27 +219,31 @@ const Desktop = () => {
       for (let index = 0; index < aboutImages.length; index++) {
         const imagePath = aboutImages[index];
         const imageName = imagePath.split("/").pop();
-        openWindow({
-          title: imageName,
-          content: <ImageViewer imagePath={imagePath} />,
-          size: { width: imageWindowWidth, height: imageWindowHeight },
-          position: fixedPositions[index],
-          groupId: aboutGroupId,
-        });
+        dispatch(
+          openWindow({
+            title: imageName,
+            content: <ImageViewer imagePath={imagePath} />,
+            size: { width: imageWindowWidth, height: imageWindowHeight },
+            position: fixedPositions[index],
+            groupId: aboutGroupId,
+          })
+        );
       }
 
       // Open the main About Me window last (so it appears on top) and centered
-      openWindow({
-        title: "About Me",
-        windowType: "about",
-        content: <AboutContent />,
-        size: { width: aboutWindowWidth, height: aboutWindowHeight },
-        position: {
-          x: centerX,
-          y: centerY,
-        },
-        groupId: aboutGroupId,
-      });
+      dispatch(
+        openWindow({
+          title: "About Me",
+          windowType: "about",
+          content: <AboutContent />,
+          size: { width: aboutWindowWidth, height: aboutWindowHeight },
+          position: {
+            x: centerX,
+            y: centerY,
+          },
+          groupId: aboutGroupId,
+        })
+      );
     } else if (type === "swe-resume") {
       window.open("/Myke Chen Resume SWE.pdf", "_blank");
     } else if (type === "pm-resume") {

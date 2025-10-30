@@ -42,9 +42,9 @@ const StickyNote = () => {
               <li>Drink water</li>
               <li>Land my dream PM job</li>
               <li>Move to the US</li>
-              <li>Get good at chess</li>
+              <li>Get good at golf</li>
               <li>Visit a new place each year</li>
-              <li>Build a new portfolio</li>
+              <li>Go touch grass</li>
               <li>Graduate alive</li>
             </ul>
           </div>
