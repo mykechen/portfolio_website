@@ -1,12 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openWindow } from "../../store/windowManagerSlice";
 import DesktopIcon from "./DesktopIcon";
 import Window from "../Window/Window";
 import Dock from "../Dock/Dock";
 import StickyNote from "./StickyNote";
-import ProjectsContent from "../Apps/Finder/ProjectsContent";
-import CertificationsContent from "../Apps/Finder/CertificationsContent";
+import FinderContent from "../Apps/Finder/FinderContent";
 import AboutContent from "../Apps/Finder/AboutContent";
 import ImageViewer from "../Apps/Finder/ImageViewer";
 import "./Desktop.css";
@@ -15,30 +14,95 @@ const Desktop = () => {
   const dispatch = useAppDispatch();
   const windows = useAppSelector((state) => state.windowManager.windows);
 
-  // Generate random positions within screen bounds
-  const generateRandomPosition = (index) => {
+  // Typewriter animation state
+  const [headerText, setHeaderText] = useState("");
+  const [subtitleText, setSubtitleText] = useState("");
+  const [showHeaderCursor, setShowHeaderCursor] = useState(true);
+  const [showSubtitleCursor, setShowSubtitleCursor] = useState(false);
+
+  const fullHeaderText = "hello world, this is myke";
+  const fullSubtitleText = "welcome to my portfolio";
+
+  // Typewriter effect
+  useEffect(() => {
+    let headerIndex = 0;
+    let subtitleIndex = 0;
+    let headerTimeout;
+    let subtitleTimeout;
+
+    // Type header first
+    const typeHeader = () => {
+      if (headerIndex < fullHeaderText.length) {
+        setHeaderText(fullHeaderText.slice(0, headerIndex + 1));
+        headerIndex++;
+
+        // Add pause after "hello world," (at index 13 which is after the comma)
+        if (headerIndex === 13) {
+          headerTimeout = setTimeout(typeHeader, 800); // 800ms pause
+        } else {
+          headerTimeout = setTimeout(typeHeader, 80);
+        }
+      } else {
+        // Header complete, hide cursor and start subtitle
+        setShowHeaderCursor(false);
+        setShowSubtitleCursor(true);
+        subtitleTimeout = setTimeout(typeSubtitle, 300);
+      }
+    };
+
+    const typeSubtitle = () => {
+      if (subtitleIndex < fullSubtitleText.length) {
+        setSubtitleText(fullSubtitleText.slice(0, subtitleIndex + 1));
+        subtitleIndex++;
+        subtitleTimeout = setTimeout(typeSubtitle, 80);
+      } else {
+        // Animation complete, keep cursor blinking
+        setShowSubtitleCursor(true);
+      }
+    };
+
+    // Start the animation
+    headerTimeout = setTimeout(typeHeader, 500);
+
+    return () => {
+      clearTimeout(headerTimeout);
+      clearTimeout(subtitleTimeout);
+    };
+  }, []);
+
+  // Organize items on the right side of the screen, with About Me centered
+  const generatePosition = (item, index, allItems) => {
     const iconWidth = 100;
     const iconHeight = 100; // approximate height including icon + label
     const menuBarHeight = 28;
     const dockHeight = 120; // dock height + margin
-    const padding = 20;
+    const padding = 30; // Consistent padding for top and sides
+    const verticalSpacing = 110; // Space between icons vertically
 
-    const minX = padding;
-    const maxX = window.innerWidth - iconWidth - padding;
-    const minY = menuBarHeight + padding;
-    const maxY = window.innerHeight - dockHeight - iconHeight - padding;
+    // Special position for About Me - centered below the title text
+    if (item.type === "about") {
+      const titleHeight = 70; // Gap below the title text
+      return {
+        x: (window.innerWidth - iconWidth) / 2,
+        y: (window.innerHeight / 2) + titleHeight,
+      };
+    }
 
-    // Add some randomness based on index to avoid overlapping
-    const baseX = minX + Math.random() * (maxX - minX);
-    const baseY = minY + Math.random() * (maxY - minY);
+    // Position other icons on the right side
+    const x = window.innerWidth - iconWidth - padding;
+    const startY = padding; // Start from padding (desktop container already accounts for menu bar)
 
-    // Add slight offset based on index to spread them out
-    const offsetX = (index % 3) * 50;
-    const offsetY = Math.floor(index / 3) * 60;
+    // Calculate adjusted index (excluding About Me from the right column)
+    const rightColumnIndex = allItems
+      .slice(0, index)
+      .filter(i => i.type !== "about").length;
+
+    // Arrange icons vertically from top to bottom
+    const y = startY + (rightColumnIndex * verticalSpacing);
 
     return {
-      x: Math.max(minX, Math.min(maxX, baseX + offsetX)),
-      y: Math.max(minY, Math.min(maxY, baseY + offsetY)),
+      x: x,
+      y: y,
     };
   };
 
@@ -46,12 +110,12 @@ const Desktop = () => {
     const items = [
       {
         icon: "/icons/folder_icon.png",
-        label: "Project1",
+        label: "EasyCal",
         type: "project1",
       },
       {
         icon: "/icons/folder_icon.png",
-        label: "Project2",
+        label: "homi",
         type: "project2",
       },
       {
@@ -83,45 +147,49 @@ const Desktop = () => {
 
     return items.map((item, index) => ({
       ...item,
-      initialPosition: generateRandomPosition(index),
+      initialPosition: generatePosition(item, index, items),
     }));
   }, []);
 
   const handleDoubleClick = (type) => {
     if (type === "project1") {
+      // Open Finder with EasyCal project selected
       dispatch(
         openWindow({
-          title: "Project1",
-          windowType: "project1",
-          content: <ProjectsContent />,
-          size: { width: 900, height: 700 },
+          title: "Finder",
+          windowType: "finder",
+          content: <FinderContent initialFolder="easycal" />,
+          size: { width: 840, height: 490 },
         })
       );
     } else if (type === "project2") {
+      // Open Finder with homi project selected
       dispatch(
         openWindow({
-          title: "Project2",
-          windowType: "project2",
-          content: <ProjectsContent />,
-          size: { width: 900, height: 700 },
+          title: "Finder",
+          windowType: "finder",
+          content: <FinderContent initialFolder="project2" />,
+          size: { width: 840, height: 490 },
         })
       );
     } else if (type === "project3") {
+      // Open Finder with Project3 selected
       dispatch(
         openWindow({
-          title: "Project3",
-          windowType: "project3",
-          content: <ProjectsContent />,
-          size: { width: 900, height: 700 },
+          title: "Finder",
+          windowType: "finder",
+          content: <FinderContent initialFolder="project3" />,
+          size: { width: 840, height: 490 },
         })
       );
     } else if (type === "certifications") {
+      // Open Finder with Certifications folder selected
       dispatch(
         openWindow({
-          title: "Certifications",
-          windowType: "certifications",
-          content: <CertificationsContent />,
-          size: { width: 900, height: 700 },
+          title: "Finder",
+          windowType: "finder",
+          content: <FinderContent initialFolder="certifications" />,
+          size: { width: 840, height: 490 },
         })
       );
     } else if (type === "about") {
@@ -251,13 +319,41 @@ const Desktop = () => {
     }
   };
 
+  // Render header text with "myke" wrapped in a hoverable span
+  const renderHeaderText = () => {
+    const mykeIndex = headerText.indexOf("myke");
+
+    if (mykeIndex === -1 || mykeIndex + 4 > headerText.length) {
+      // "myke" hasn't been typed yet or is incomplete
+      return headerText;
+    }
+
+    // Split text to wrap "myke" in a span
+    const beforeMyke = headerText.slice(0, mykeIndex);
+    const afterMyke = headerText.slice(mykeIndex + 4);
+
+    return (
+      <>
+        {beforeMyke}
+        <span className="myke-hover">myke</span>
+        {afterMyke}
+      </>
+    );
+  };
+
   return (
     <div className="desktop">
       <div className="desktop-background" />
 
       <div className="desktop-title">
-        <h1 className="desktop-title-header">hello world, this is myke</h1>
-        <p className="desktop-title-subtitle">welcome to my portfolio</p>
+        <h1 className="desktop-title-header">
+          {renderHeaderText()}
+          {showHeaderCursor && <span className="typewriter-cursor">|</span>}
+        </h1>
+        <p className="desktop-title-subtitle">
+          {subtitleText}
+          {showSubtitleCursor && <span className="typewriter-cursor">|</span>}
+        </p>
       </div>
 
       <div className="desktop-content">

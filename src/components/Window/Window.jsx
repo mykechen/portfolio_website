@@ -23,6 +23,7 @@ const Window = ({ id, title, content }) => {
   if (!window || window.minimized) return null;
 
   const noTitleBar = window.noTitleBar || false;
+  const windowType = window.windowType || "";
 
   const handleClick = () => {
     dispatch(bringToFront(id));
@@ -88,7 +89,7 @@ const Window = ({ id, title, content }) => {
           />
         )}
         <div
-          className="window-content"
+          className={`window-content ${windowType ? `window-content-${windowType}` : ""}`}
           onClick={(e) => {
             // Allow clicks within content to work normally, prevent window focus on content click
             e.stopPropagation();
@@ -150,7 +151,7 @@ const Window = ({ id, title, content }) => {
           />
         )}
         <div
-          className="window-content"
+          className={`window-content ${windowType ? `window-content-${windowType}` : ""}`}
           onClick={(e) => {
             // Allow clicks within content to work normally, prevent window focus on content click
             e.stopPropagation();

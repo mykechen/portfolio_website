@@ -1,0 +1,122 @@
+.finder-container {
+  display: flex;
+  height: 100%;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.finder-sidebar {
+  width: 180px;
+  background: linear-gradient(to bottom, #e8e8e8 0%, #d5d5d5 100%);
+  border-right: 1px solid #c0c0c0;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.finder-sidebar-section {
+  padding: 4px 0;
+  margin-bottom: 8px;
+}
+
+.finder-sidebar-header {
+  font-size: 11px;
+  font-weight: 600;
+  color: #999;
+  padding: 8px 12px 4px 12px;
+  letter-spacing: 0.3px;
+}
+
+.finder-sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease;
+}
+
+.finder-sidebar-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.finder-sidebar-item.active {
+  background: linear-gradient(to bottom, #4a90e2 0%, #357abd 100%);
+  color: white;
+}
+
+.finder-sidebar-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  object-fit: contain;
+}
+
+.finder-sidebar-label {
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Main Content Area */
+.finder-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.finder-content-header {
+  padding: 12px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(to bottom, #f8f8f8 0%, #f0f0f0 100%);
+  text-align: center;
+}
+
+.finder-header-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.finder-header-subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  color: #666;
+  margin: 2px 0 0 0;
+  line-height: 1.3;
+}
+
+.finder-content-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+/* Scrollbar styling for webkit browsers */
+.finder-sidebar::-webkit-scrollbar,
+.finder-content-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.finder-sidebar::-webkit-scrollbar-track,
+.finder-content-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.finder-sidebar::-webkit-scrollbar-thumb,
+.finder-content-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.finder-sidebar::-webkit-scrollbar-thumb:hover,
+.finder-content-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+

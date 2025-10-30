@@ -3,6 +3,7 @@ import "./PhotosContent.css";
 
 const PhotosContent = () => {
   const [expandedImage, setExpandedImage] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);
 
   // Function to get all images from the gallery folder
   // Simply list all filenames here - add new images by adding their filename to this array
@@ -45,11 +46,17 @@ const PhotosContent = () => {
   const handleImageClick = (src, e) => {
     e.stopPropagation();
     setExpandedImage(src);
+    setIsClosing(false);
   };
 
   const handleCloseExpanded = (e) => {
     e.stopPropagation();
-    setExpandedImage(null);
+    setIsClosing(true);
+    // Wait for animation to complete before removing the image
+    setTimeout(() => {
+      setExpandedImage(null);
+      setIsClosing(false);
+    }, 300); // Match the animation duration
   };
 
   return (
@@ -72,24 +79,16 @@ const PhotosContent = () => {
       </div>
 
       {expandedImage && (
-        <div className="photos-expanded-overlay" onClick={handleCloseExpanded}>
-          <div
-            className="photos-expanded-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="photos-expanded-close"
-              onClick={handleCloseExpanded}
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <img
-              src={expandedImage}
-              alt="Expanded view"
-              className="photos-expanded-image"
-            />
-          </div>
+        <div
+          className={`photos-expanded-overlay ${isClosing ? 'closing' : ''}`}
+          onClick={handleCloseExpanded}
+        >
+          <img
+            src={expandedImage}
+            alt="Expanded view"
+            className={`photos-expanded-image ${isClosing ? 'closing' : ''}`}
+            onClick={handleCloseExpanded}
+          />
         </div>
       )}
     </div>

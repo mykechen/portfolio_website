@@ -8,6 +8,7 @@ import "./MenuBar.css";
 const MenuBar = () => {
   const [time, setTime] = useState(new Date());
   const [showResumeDropdown, setShowResumeDropdown] = useState(false);
+  const [isClosingDropdown, setIsClosingDropdown] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -21,24 +22,32 @@ const MenuBar = () => {
   // Close dropdowns when clicking outside
   const resumeMenuRef = useRef(null);
 
+  const closeDropdown = () => {
+    setIsClosingDropdown(true);
+    setTimeout(() => {
+      setShowResumeDropdown(false);
+      setIsClosingDropdown(false);
+    }, 200); // Match animation duration
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         resumeMenuRef.current &&
         !resumeMenuRef.current.contains(event.target)
       ) {
-        setShowResumeDropdown(false);
+        closeDropdown();
       }
     };
 
-    if (showResumeDropdown) {
+    if (showResumeDropdown && !isClosingDropdown) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showResumeDropdown]);
+  }, [showResumeDropdown, isClosingDropdown]);
 
   const handleResumeClick = (type) => {
     if (type === "swe") {
@@ -46,7 +55,15 @@ const MenuBar = () => {
     } else if (type === "pm") {
       window.open("/Myke Chen Resume PM.pdf", "_blank");
     }
-    setShowResumeDropdown(false);
+    closeDropdown();
+  };
+
+  const toggleDropdown = () => {
+    if (showResumeDropdown) {
+      closeDropdown();
+    } else {
+      setShowResumeDropdown(true);
+    }
   };
 
   const formatTime = (date) => {
@@ -97,16 +114,24 @@ const MenuBar = () => {
         </button>
         <button
           className="menu-item"
-          onClick={() =>
+          onClick={() => {
+            const menuBarHeight = 28;
+            const windowWidth = 600;
+            const windowHeight = 450;
+
             dispatch(
               openWindow({
                 title: "Contact Me",
                 windowType: "contact",
                 content: <ContactContent />,
-                size: { width: 750, height: 500 },
+                size: { width: windowWidth, height: windowHeight },
+                position: {
+                  x: Math.round((window.innerWidth - windowWidth) / 2),
+                  y: Math.round((window.innerHeight - windowHeight - menuBarHeight) / 2 + menuBarHeight),
+                },
               })
-            )
-          }
+            );
+          }}
           aria-label="Contact"
         >
           <span className="menu-text">Contact</span>
@@ -118,13 +143,13 @@ const MenuBar = () => {
         >
           <button
             className="menu-item-button"
-            onClick={() => setShowResumeDropdown(!showResumeDropdown)}
+            onClick={toggleDropdown}
             aria-label="Resume"
           >
             <span className="menu-text">Resume</span>
           </button>
           {showResumeDropdown && (
-            <div className="menu-dropdown">
+            <div className={`menu-dropdown ${isClosingDropdown ? 'closing' : ''}`}>
               <button
                 className="dropdown-item"
                 onClick={() => handleResumeClick("swe")}

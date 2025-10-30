@@ -2,9 +2,11 @@ import React from "react";
 import DockIcon from "./DockIcon";
 import { useAppDispatch } from "../../store/hooks";
 import { openWindow } from "../../store/windowManagerSlice";
+import FinderContent from "../Apps/Finder/FinderContent";
 import SpotifyPlaylistContent from "../Apps/Finder/SpotifyPlaylistContent";
 import ContactContent from "../Apps/Finder/ContactContent";
 import PhotosContent from "../Apps/Finder/PhotosContent";
+import MailContent from "../Apps/Finder/MailContent";
 import "./Dock.css";
 
 const Dock = () => {
@@ -19,8 +21,9 @@ const Dock = () => {
         dispatch(
           openWindow({
             title: "Finder",
-            content: <div className="p-6 text-center">Finder window</div>,
-            size: { width: 800, height: 600 },
+            windowType: "finder",
+            content: <FinderContent initialFolder="projects" />,
+            size: { width: 840, height: 490 },
           })
         ),
     },
@@ -45,20 +48,21 @@ const Dock = () => {
         const menuBarHeight = 28;
         const dockHeight = 80;
         const dockBottomOffset = 20; // Dock is positioned 20px from bottom
-        const paddingTop = 20;
-        const paddingBottom = 20;
+        const paddingTop = 40;
+        const gapAboveDock = 60; // Gap between window bottom and dock top
 
         // Calculate available space
         const windowTop = menuBarHeight + paddingTop;
         const dockTop = window.innerHeight - dockBottomOffset - dockHeight;
-        const maxWindowHeight = dockTop - paddingBottom - windowTop;
+        const availableHeight = dockTop - gapAboveDock - windowTop;
 
-        // Use 50% of available space, ensure it's a valid number
-        const windowHeight = Math.max(400, Math.round(maxWindowHeight * 0.5));
+        // Use full available height - 100% of available space
+        const calculatedHeight = Math.round(availableHeight * 1.0);
+        const windowHeight = Math.max(400, calculatedHeight);
 
         // Set a reasonable default width, but allow resizing
-        const defaultWidth = 1200;
-        const windowWidth = Math.min(defaultWidth, window.innerWidth * 0.9);
+        const defaultWidth = 1000;
+        const windowWidth = Math.min(defaultWidth, window.innerWidth * 0.85);
 
         dispatch(
           openWindow({
@@ -91,21 +95,39 @@ const Dock = () => {
       id: "mail",
       icon: "/icons/mail_icon.png",
       label: "Mail",
-      action: () => window.open("mailto:your.email@example.com", "_blank"),
+      action: () => {
+        dispatch(
+          openWindow({
+            title: "Mail",
+            windowType: "mail",
+            content: <MailContent />,
+            size: { width: 1000, height: 600 },
+          })
+        );
+      },
     },
     {
       id: "contact",
       icon: "/icons/contacts_icon.png",
       label: "Contact",
-      action: () =>
+      action: () => {
+        const menuBarHeight = 28;
+        const windowWidth = 600;
+        const windowHeight = 450;
+
         dispatch(
           openWindow({
             title: "Contact Me",
             windowType: "contact",
             content: <ContactContent />,
-            size: { width: 750, height: 500 },
+            size: { width: windowWidth, height: windowHeight },
+            position: {
+              x: Math.round((window.innerWidth - windowWidth) / 2),
+              y: Math.round((window.innerHeight - windowHeight - menuBarHeight) / 2 + menuBarHeight),
+            },
           })
-        ),
+        );
+      },
     },
     {
       id: "github",
