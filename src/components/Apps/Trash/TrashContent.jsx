@@ -61,15 +61,26 @@ const TrashContent = () => {
     },
   ];
 
-  // Generate initial random positions for each file
+  // Calculate grid-based initial positions
   const initialPositions = useMemo(() => {
-    return files.reduce((acc, file) => {
-      acc[file.id] = {
-        x: Math.random() * 70 + 5, // 5% to 75% from left
-        y: Math.random() * 70 + 5, // 5% to 75% from top
+    const positions = {};
+    const cols = 4; // 4 columns in the grid
+    const itemWidth = 160; // Width of each grid cell in pixels
+    const itemHeight = 140; // Height of each grid cell in pixels
+    const startX = 40; // Starting X position (padding)
+    const startY = 40; // Starting Y position (padding)
+
+    files.forEach((file, index) => {
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+
+      positions[file.id] = {
+        x: startX + col * itemWidth,
+        y: startY + row * itemHeight,
       };
-      return acc;
-    }, {});
+    });
+
+    return positions;
   }, []);
 
   const [positions, setPositions] = useState(initialPositions);
@@ -93,11 +104,11 @@ const TrashContent = () => {
     const container = e.currentTarget;
     const rect = container.getBoundingClientRect();
 
-    const deltaX = ((e.clientX - dragRef.current.startX) / rect.width) * 100;
-    const deltaY = ((e.clientY - dragRef.current.startY) / rect.height) * 100;
+    const deltaX = e.clientX - dragRef.current.startX;
+    const deltaY = e.clientY - dragRef.current.startY;
 
-    const newX = Math.max(0, Math.min(85, dragRef.current.initialX + deltaX));
-    const newY = Math.max(0, Math.min(85, dragRef.current.initialY + deltaY));
+    const newX = Math.max(0, Math.min(rect.width - 120, dragRef.current.initialX + deltaX));
+    const newY = Math.max(0, Math.min(rect.height - 120, dragRef.current.initialY + deltaY));
 
     setPositions((prev) => ({
       ...prev,
@@ -122,8 +133,8 @@ const TrashContent = () => {
             key={file.id}
             className={`trash-file-item ${dragging === file.id ? "dragging" : ""}`}
             style={{
-              left: `${positions[file.id].x}%`,
-              top: `${positions[file.id].y}%`,
+              left: `${positions[file.id].x}px`,
+              top: `${positions[file.id].y}px`,
             }}
             onMouseDown={(e) => handleMouseDown(e, file.id)}
           >

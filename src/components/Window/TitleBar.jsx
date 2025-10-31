@@ -1,7 +1,14 @@
 import React from "react";
 import "./TitleBar.css";
 
-const TitleBar = ({ title, onClose, onMinimize, onMaximize, maximized }) => {
+const TitleBar = ({
+  title,
+  onClose,
+  onMinimize,
+  onMaximize,
+  maximized,
+  navigationControls,
+}) => {
   const handleTrafficLightClick = (e, action) => {
     e.stopPropagation();
     action();
@@ -26,7 +33,14 @@ const TitleBar = ({ title, onClose, onMinimize, onMaximize, maximized }) => {
           aria-label="Maximize"
         />
       </div>
-      <div className="title-bar-title">{title}</div>
+      {navigationControls ? (
+        <div className="title-bar-with-nav">
+          {navigationControls}
+          <div className="title-bar-title">{title}</div>
+        </div>
+      ) : (
+        <div className="title-bar-title">{title}</div>
+      )}
     </div>
   );
 };

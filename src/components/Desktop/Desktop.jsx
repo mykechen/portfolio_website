@@ -117,11 +117,6 @@ const Desktop = () => {
       },
       {
         icon: "/icons/folder_icon.png",
-        label: "Project3",
-        type: "project3",
-      },
-      {
-        icon: "/icons/folder_icon.png",
         label: "Certifications",
         type: "certifications",
       },
@@ -166,16 +161,6 @@ const Desktop = () => {
           title: "Finder",
           windowType: "finder",
           content: <FinderContent initialFolder="project2" />,
-          size: { width: 840, height: 490 },
-        })
-      );
-    } else if (type === "project3") {
-      // Open Finder with Project3 selected
-      dispatch(
-        openWindow({
-          title: "Finder",
-          windowType: "finder",
-          content: <FinderContent initialFolder="project3" />,
           size: { width: 840, height: 490 },
         })
       );

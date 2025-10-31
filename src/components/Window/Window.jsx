@@ -20,6 +20,8 @@ const Window = ({ id, title, content }) => {
 
   const window = windows.find((w) => w.id === id);
   const [isDragging, setIsDragging] = useState(false);
+  const [navigationControls, setNavigationControls] = useState(null);
+  const [dynamicTitle, setDynamicTitle] = useState(title);
 
   if (!window || window.minimized) return null;
 
@@ -87,11 +89,12 @@ const Window = ({ id, title, content }) => {
       >
         {!noTitleBar && (
           <TitleBar
-            title={title}
+            title={dynamicTitle}
             onClose={handleClose}
             onMinimize={() => dispatch(minimizeWindow(id))}
             onMaximize={() => dispatch(maximizeWindow(id))}
             maximized={window.maximized}
+            navigationControls={navigationControls}
           />
         )}
         <div
@@ -121,6 +124,11 @@ const Window = ({ id, title, content }) => {
                 onMinimize: () => dispatch(minimizeWindow(id)),
                 onMaximize: () => dispatch(maximizeWindow(id)),
                 isDragging: false,
+              })
+            : windowType === "finder" && React.isValidElement(content)
+            ? React.cloneElement(content, {
+                setNavigationControls,
+                setDynamicTitle,
               })
             : content}
         </div>
@@ -179,11 +187,12 @@ const Window = ({ id, title, content }) => {
       >
         {!noTitleBar && (
           <TitleBar
-            title={title}
+            title={dynamicTitle}
             onClose={handleClose}
             onMinimize={() => dispatch(minimizeWindow(id))}
             onMaximize={() => dispatch(maximizeWindow(id))}
             maximized={window.maximized}
+            navigationControls={navigationControls}
           />
         )}
         <div
@@ -213,6 +222,11 @@ const Window = ({ id, title, content }) => {
                 onMinimize: () => dispatch(minimizeWindow(id)),
                 onMaximize: () => dispatch(maximizeWindow(id)),
                 isDragging,
+              })
+            : windowType === "finder" && React.isValidElement(content)
+            ? React.cloneElement(content, {
+                setNavigationControls,
+                setDynamicTitle,
               })
             : content}
         </div>

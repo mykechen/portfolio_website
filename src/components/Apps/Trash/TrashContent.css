@@ -10,7 +10,6 @@
   width: 100%;
   height: 100%;
   position: relative;
-  padding: 20px;
 }
 
 .trash-file-item {
@@ -23,10 +22,13 @@
   transition: transform 0.2s;
   user-select: none;
   width: 100px;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .trash-file-item:hover {
   transform: scale(1.05);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .trash-file-item:active {
@@ -38,6 +40,7 @@
   transform: scale(1.08);
   z-index: 1000;
   transition: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .trash-file-icon {
@@ -66,10 +69,7 @@
   color: #1d1d1f;
   text-align: center;
   word-break: break-word;
-  background: rgba(255, 255, 255, 0.95);
   padding: 4px 8px;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   max-width: 100px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -93,5 +93,25 @@
   .trash-file-name {
     font-size: 11px;
     max-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .trash-file-item {
+    width: 70px;
+  }
+
+  .trash-file-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .trash-file-react-icon {
+    font-size: 40px;
+  }
+
+  .trash-file-name {
+    font-size: 10px;
+    max-width: 70px;
   }
 }

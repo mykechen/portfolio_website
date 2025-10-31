@@ -63,3 +63,67 @@
   pointer-events: none;
   padding-right: 60px;
 }
+
+.title-bar-with-nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-right: 8px;
+}
+
+.title-bar-with-nav .title-bar-title {
+  flex: 1;
+  padding-right: 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.1px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.title-bar-with-nav .finder-nav-controls {
+  margin-left: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.finder-nav-controls {
+  display: flex;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.finder-nav-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-size: 18px;
+  transition: background-color 0.15s;
+  -webkit-app-region: no-drag;
+  pointer-events: auto;
+}
+
+.finder-nav-btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.finder-nav-btn:active:not(:disabled) {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.finder-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

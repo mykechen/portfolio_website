@@ -29,7 +29,7 @@ const Dock = () => {
           openWindow({
             title: "Finder",
             windowType: "finder",
-            content: <FinderContent initialFolder="projects" />,
+            content: <FinderContent initialFolder="desktop" />,
             size: { width: 840, height: 490 },
           })
         ),

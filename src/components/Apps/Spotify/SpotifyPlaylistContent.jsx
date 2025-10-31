@@ -38,11 +38,9 @@ const SpotifyPlaylistContent = ({
             type="button"
           />
         </div>
-        <span className="spotify-drag-title">vibing</span>
+        <span className="spotify-drag-title">spotify</span>
       </div>
-      <div
-        className={`spotify-iframe-wrapper${isDragging ? " dragging" : ""}`}
-      >
+      <div className={`spotify-iframe-wrapper${isDragging ? " dragging" : ""}`}>
         <iframe
           title="Spotify Playlist"
           src={`https://open.spotify.com/embed/playlist/${PLAYLIST_ID}?utm_source=generator`}
