@@ -1,5 +1,5 @@
 .dock {
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   left: 0;
   right: 0;
@@ -8,7 +8,14 @@
   justify-content: center;
   align-items: center;
   pointer-events: none;
-  z-index: 10000; /* Always above all windows (windows start at z-index: 1000) */
+  z-index: 50000; /* Keep the dock above draggable app windows */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+.dock.dock-hidden {
+  transform: translateY(120px);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .dock-inner {
@@ -27,9 +34,10 @@
 
 .dock-divider {
   width: 1px;
-  height: 60%;
-  background: rgba(0, 0, 0, 0.2);
-  margin: 0 8px;
+  height: 40px;
+  background: #4a4a4a;
+  margin: 0 4px;
+  border-radius: 999px;
 }
 
 @media (max-width: 768px) {

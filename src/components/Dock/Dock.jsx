@@ -1,6 +1,6 @@
 import React from "react";
 import DockIcon from "./DockIcon";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { openWindow } from "../../store/windowManagerSlice";
 import FinderContent from "../Apps/Finder/FinderContent";
 import SpotifyPlaylistContent from "../Apps/Spotify/SpotifyPlaylistContent";
@@ -9,10 +9,15 @@ import PhotosContent from "../Apps/Photos/PhotosContent";
 import MailContent from "../Apps/Mail/MailContent";
 import MessagesContent from "../Apps/Messages/MessagesContent";
 import SafariContent from "../Apps/Safari/SafariContent";
+import TrashContent from "../Apps/Trash/TrashContent";
 import "./Dock.css";
 
 const Dock = () => {
   const dispatch = useAppDispatch();
+  const windows = useAppSelector((state) => state.windowManager.windows);
+
+  // Check if any window is maximized
+  const hasMaximizedWindow = windows.some((window) => window.maximized);
 
   const dockItems = [
     {
@@ -180,12 +185,20 @@ const Dock = () => {
       id: "trash",
       icon: "/icons/trash_icon.png",
       label: "Trash",
-      action: () => console.log("Trash clicked"),
+      action: () =>
+        dispatch(
+          openWindow({
+            title: "Trash",
+            windowType: "trash",
+            content: <TrashContent />,
+            size: { width: 800, height: 600 },
+          })
+        ),
     },
   ];
 
   return (
-    <div className="dock">
+    <div className={`dock ${hasMaximizedWindow ? "dock-hidden" : ""}`}>
       <div className="dock-inner">
         {dockItems.map((item, index) => (
           <React.Fragment key={item.id}>

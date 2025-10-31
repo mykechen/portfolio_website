@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Rnd } from "react-rnd";
 import { motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -19,6 +19,7 @@ const Window = ({ id, title, content }) => {
   const windows = useAppSelector((state) => state.windowManager.windows);
 
   const window = windows.find((w) => w.id === id);
+  const [isDragging, setIsDragging] = useState(false);
 
   if (!window || window.minimized) return null;
 
@@ -29,7 +30,12 @@ const Window = ({ id, title, content }) => {
     dispatch(bringToFront(id));
   };
 
+  const handleDragStart = () => {
+    setIsDragging(true);
+  };
+
   const handleDragStop = (e, d) => {
+    setIsDragging(false);
     if (!window.maximized) {
       dispatch(
         updateWindowPosition({ windowId: id, position: { x: d.x, y: d.y } })
@@ -114,6 +120,7 @@ const Window = ({ id, title, content }) => {
                 onClose: handleClose,
                 onMinimize: () => dispatch(minimizeWindow(id)),
                 onMaximize: () => dispatch(maximizeWindow(id)),
+                isDragging: false,
               })
             : content}
         </div>
@@ -125,6 +132,7 @@ const Window = ({ id, title, content }) => {
     <Rnd
       position={{ x: window.position.x, y: window.position.y }}
       size={{ width: window.size.width, height: window.size.height }}
+      onDragStart={handleDragStart}
       onDragStop={handleDragStop}
       onResize={handleResize}
       onResizeStop={handleResizeStop}
@@ -133,7 +141,15 @@ const Window = ({ id, title, content }) => {
       maxWidth={noTitleBar && windowType !== "safari" ? window.size.width : undefined}
       maxHeight={noTitleBar && windowType !== "safari" ? window.size.height : undefined}
       style={{ zIndex: window.zIndex }}
-      dragHandleClassName={noTitleBar ? (windowType === "safari" ? "safari-titlebar" : "") : "title-bar"}
+      dragHandleClassName={
+        noTitleBar
+          ? windowType === "safari"
+            ? "safari-titlebar"
+            : windowType === "spotify-playlist"
+              ? "spotify-drag-handle"
+              : ""
+          : "title-bar"
+      }
       disableResizing={window.closing || (noTitleBar && windowType !== "safari") ? true : undefined}
       disableDragging={window.closing ? true : undefined}
       enableResizing={
@@ -196,6 +212,7 @@ const Window = ({ id, title, content }) => {
                 onClose: handleClose,
                 onMinimize: () => dispatch(minimizeWindow(id)),
                 onMaximize: () => dispatch(maximizeWindow(id)),
+                isDragging,
               })
             : content}
         </div>

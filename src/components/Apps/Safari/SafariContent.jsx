@@ -1,20 +1,40 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   MdChevronLeft,
   MdChevronRight,
   MdRefresh,
   MdShare,
   MdAdd,
-  MdGridView
+  MdGridView,
 } from "react-icons/md";
-import {
-  RiSidebarFoldLine,
-  RiShieldLine
-} from "react-icons/ri";
+import { RiSidebarFoldLine, RiShieldLine } from "react-icons/ri";
 import { experiences } from "./experiencesData";
 import "./SafariContent.css";
 
 const SafariContent = ({ onClose, onMinimize, onMaximize }) => {
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: contentRef.current,
+      threshold: 0.1,
+      rootMargin: "0px 0px -100px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("fade-in-visible");
+        }
+      });
+    }, observerOptions);
+
+    const cards = contentRef.current?.querySelectorAll(".experience-card");
+    cards?.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="safari-container">
       {/* Safari Integrated Title Bar + Toolbar */}
@@ -49,9 +69,6 @@ const SafariContent = ({ onClose, onMinimize, onMaximize }) => {
 
         {/* Left Controls */}
         <div className="safari-toolbar-left">
-          <button className="safari-sidebar-btn">
-            <RiSidebarFoldLine />
-          </button>
           <button className="safari-nav-btn" disabled>
             <MdChevronLeft />
           </button>
@@ -67,7 +84,7 @@ const SafariContent = ({ onClose, onMinimize, onMaximize }) => {
             type="text"
             className="safari-search-input"
             placeholder="Search or enter website name"
-            value="mykechen.com/experience"
+            value="mykeachen.com/experience"
             readOnly
           />
           <MdRefresh className="safari-refresh" />
@@ -87,10 +104,15 @@ const SafariContent = ({ onClose, onMinimize, onMaximize }) => {
         </div>
       </div>
 
+      {/* Blue Progress Bar */}
+      <div className="safari-progress-bar">
+        <div className="safari-progress-fill"></div>
+      </div>
+
       {/* Safari Content Area */}
-      <div className="safari-content">
+      <div className="safari-content" ref={contentRef}>
         <div className="experience-container">
-          <h1 className="experience-title">Work Experience</h1>
+          <h1 className="experience-title">Experience</h1>
 
           <div className="experience-timeline">
             {experiences.map((exp, index) => (

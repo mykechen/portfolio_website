@@ -4,6 +4,7 @@ import { store } from "./store/store";
 import { useAppSelector } from "./store/hooks";
 import MenuBar from "./components/MenuBar/MenuBar";
 import Desktop from "./components/Desktop/Desktop";
+import Dock from "./components/Dock/Dock";
 import Window from "./components/Window/Window";
 import "./App.css";
 
@@ -26,6 +27,7 @@ function AppContent() {
             />
           )
       )}
+      <Dock />
     </div>
   );
 }

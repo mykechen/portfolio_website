@@ -2,7 +2,6 @@ import React, { useMemo, useState, useEffect } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { openWindow } from "../../store/windowManagerSlice";
 import DesktopIcon from "./DesktopIcon";
-import Dock from "../Dock/Dock";
 import StickyNote from "./StickyNote";
 import FinderContent from "../Apps/Finder/FinderContent";
 import AboutContent from "../Apps/Finder/AboutContent";
@@ -367,7 +366,6 @@ const Desktop = () => {
         ))}
       </div>
 
-      <Dock />
     </div>
   );
 };
