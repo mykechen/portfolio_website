@@ -101,13 +101,13 @@ const FinderContent = ({
       {
         id: "easycal",
         name: "EasyCal",
-        icon: "/images/easycal_logo.png",
+        icon: "/icons/folder_icon.png",
         type: "folder",
       },
       {
         id: "project2",
         name: "homi",
-        icon: "/images/homi_logo.png",
+        icon: "/icons/folder_icon.png",
         type: "folder",
       },
       {
