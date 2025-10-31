@@ -3,10 +3,12 @@ import DockIcon from "./DockIcon";
 import { useAppDispatch } from "../../store/hooks";
 import { openWindow } from "../../store/windowManagerSlice";
 import FinderContent from "../Apps/Finder/FinderContent";
-import SpotifyPlaylistContent from "../Apps/Finder/SpotifyPlaylistContent";
-import ContactContent from "../Apps/Finder/ContactContent";
-import PhotosContent from "../Apps/Finder/PhotosContent";
-import MailContent from "../Apps/Finder/MailContent";
+import SpotifyPlaylistContent from "../Apps/Spotify/SpotifyPlaylistContent";
+import ContactContent from "../Apps/Contact/ContactContent";
+import PhotosContent from "../Apps/Photos/PhotosContent";
+import MailContent from "../Apps/Mail/MailContent";
+import MessagesContent from "../Apps/Messages/MessagesContent";
+import SafariContent from "../Apps/Safari/SafariContent";
 import "./Dock.css";
 
 const Dock = () => {
@@ -35,8 +37,10 @@ const Dock = () => {
         dispatch(
           openWindow({
             title: "Safari",
-            content: <div className="p-6 text-center">Safari window</div>,
-            size: { width: 800, height: 600 },
+            windowType: "safari",
+            content: <SafariContent />,
+            size: { width: 1000, height: 700 },
+            noTitleBar: true,
           })
         ),
     },
@@ -86,7 +90,8 @@ const Dock = () => {
         dispatch(
           openWindow({
             title: "Messages",
-            content: <div className="p-6 text-center">Contact form</div>,
+            windowType: "messages",
+            content: <MessagesContent />,
             size: { width: 700, height: 600 },
           })
         ),
@@ -123,7 +128,10 @@ const Dock = () => {
             size: { width: windowWidth, height: windowHeight },
             position: {
               x: Math.round((window.innerWidth - windowWidth) / 2),
-              y: Math.round((window.innerHeight - windowHeight - menuBarHeight) / 2 + menuBarHeight),
+              y: Math.round(
+                (window.innerHeight - windowHeight - menuBarHeight) / 2 +
+                  menuBarHeight
+              ),
             },
           })
         );
@@ -148,9 +156,10 @@ const Dock = () => {
       label: "Spotify",
       action: () => {
         const dockHeight = 120;
-        const windowWidth = 400;
-        const windowHeight = 600;
-        const padding = 20;
+        const windowWidth = 360;
+        const windowHeight = 560;
+        const rightPadding = 60;
+        const bottomPadding = -30; // Negative value to position even lower
 
         dispatch(
           openWindow({
@@ -159,8 +168,8 @@ const Dock = () => {
             content: <SpotifyPlaylistContent />,
             size: { width: windowWidth, height: windowHeight },
             position: {
-              x: window.innerWidth - windowWidth - padding,
-              y: window.innerHeight - dockHeight - windowHeight - padding,
+              x: window.innerWidth - windowWidth - rightPadding,
+              y: window.innerHeight - dockHeight - windowHeight - bottomPadding,
             },
             noTitleBar: true,
           })

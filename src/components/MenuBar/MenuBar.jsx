@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { openWindow } from "../../store/windowManagerSlice";
-import ContactContent from "../Apps/Finder/ContactContent";
+import ContactContent from "../Apps/Contact/ContactContent";
 import { IoBatteryFull } from "react-icons/io5";
 import "./MenuBar.css";
 

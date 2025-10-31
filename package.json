@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@reduxjs/toolkit": "^2.9.2",
     "framer-motion": "^10.16.16",
     "lucide-react": "^0.294.0",

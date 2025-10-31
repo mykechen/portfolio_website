@@ -14,14 +14,15 @@
 
 .window.maximized {
   position: fixed !important;
-  top: 28px !important;
+  top: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  bottom: 80px !important;
-  width: 100% !important;
-  height: calc(100vh - 108px) !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
   border-radius: 0;
   box-shadow: none;
+  z-index: 10001 !important;
 }
 
 .window.no-title-bar {
@@ -32,6 +33,33 @@
 .window.no-title-bar .window-content {
   border-radius: 8px;
   height: 100%;
+}
+
+/* Safari-specific window styles */
+.window-content-safari {
+  background: #ffffff;
+  border-radius: 0;
+}
+
+.window.no-title-bar .window-content-safari {
+  border-radius: 0 0 10px 10px;
+}
+
+/* Spotify-specific window styles */
+.window-content-spotify-playlist {
+  background: #1a1a1a;
+  border-radius: 0;
+  padding: 0;
+}
+
+.window.no-title-bar .window-content-spotify-playlist {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Override window background for Spotify windows */
+.window-spotify-playlist {
+  background: #1a1a1a !important;
 }
 
 .window-content {

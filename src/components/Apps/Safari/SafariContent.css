@@ -1,0 +1,400 @@
+.safari-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* Safari Integrated Title Bar */
+.safari-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: #f6f6f6;
+  border-bottom: 1px solid #d1d1d6;
+  border-radius: 10px 10px 0 0;
+  flex-shrink: 0;
+  height: 52px;
+  position: relative;
+  cursor: grab;
+  -webkit-app-region: drag;
+}
+
+.safari-titlebar:active {
+  cursor: grabbing;
+}
+
+/* Prevent drag on interactive elements */
+.safari-titlebar button,
+.safari-titlebar input {
+  -webkit-app-region: no-drag;
+}
+
+/* Traffic Lights */
+.safari-traffic-lights {
+  display: flex;
+  gap: 8px;
+  padding-right: 12px;
+  -webkit-app-region: no-drag;
+}
+
+.safari-titlebar .traffic-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-app-region: no-drag;
+}
+
+.safari-titlebar .traffic-light-close {
+  background: #ff5f57;
+}
+
+.safari-titlebar .traffic-light-close:hover {
+  background: #ff1a1a;
+}
+
+.safari-titlebar .traffic-light-minimize {
+  background: #ffbd2e;
+}
+
+.safari-titlebar .traffic-light-minimize:hover {
+  background: #ff9d00;
+}
+
+.safari-titlebar .traffic-light-maximize {
+  background: #28c840;
+}
+
+.safari-titlebar .traffic-light-maximize:hover {
+  background: #00d700;
+}
+
+.safari-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.safari-sidebar-btn {
+  width: 32px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 20px;
+  transition: background-color 0.15s;
+}
+
+.safari-sidebar-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.safari-nav-btn {
+  width: 32px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 20px;
+  transition: background-color 0.15s;
+}
+
+.safari-nav-btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.safari-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.safari-url-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  height: 32px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.safari-shield {
+  font-size: 16px;
+  color: #8e8e93;
+  flex-shrink: 0;
+}
+
+.safari-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  color: #1d1d1f;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  text-align: center;
+}
+
+.safari-search-input::placeholder {
+  color: #8e8e93;
+  text-align: center;
+}
+
+.safari-refresh {
+  font-size: 16px;
+  color: #8e8e93;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.safari-refresh:hover {
+  color: #666;
+}
+
+.safari-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.safari-action-btn {
+  width: 32px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 18px;
+  transition: background-color 0.15s;
+}
+
+.safari-action-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Safari Content Area */
+.safari-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+.safari-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.safari-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.safari-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 6px;
+  border: 2px solid #f1f1f1;
+}
+
+.safari-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Experience Container */
+.experience-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.experience-title {
+  font-size: 42px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 40px;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.experience-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Experience Card */
+.experience-card {
+  padding: 32px 0;
+  position: relative;
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 20px;
+}
+
+.experience-company-info {
+  flex: 1;
+}
+
+.experience-company {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 0 0 6px 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.experience-role {
+  font-size: 18px;
+  font-weight: 600;
+  color: #007AFF;
+  margin: 0 0 4px 0;
+}
+
+.experience-location {
+  font-size: 15px;
+  color: #86868b;
+  margin: 0;
+}
+
+.experience-duration {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
+  white-space: nowrap;
+  padding: 6px 14px;
+  background: #f5f5f7;
+  border-radius: 6px;
+}
+
+.experience-description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #424245;
+  margin: 0 0 20px 0;
+  font-style: italic;
+}
+
+.experience-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.experience-bullets li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #1d1d1f;
+  margin-bottom: 12px;
+  padding-left: 24px;
+  position: relative;
+}
+
+.experience-bullets li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #007AFF;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Skills */
+.experience-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.skill-tag {
+  padding: 6px 12px;
+  background: #e8f4ff;
+  color: #0066cc;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #d0e8ff;
+  transition: all 0.2s;
+}
+
+.skill-tag:hover {
+  background: #d0e8ff;
+  transform: translateY(-1px);
+}
+
+/* Divider */
+.experience-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e5e5e7 20%, #e5e5e7 80%, transparent);
+  margin-top: 32px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .experience-container {
+    padding: 24px 16px;
+  }
+
+  .experience-title {
+    font-size: 32px;
+    margin-bottom: 28px;
+  }
+
+  .experience-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .experience-duration {
+    align-self: flex-start;
+  }
+
+  .experience-company {
+    font-size: 22px;
+  }
+
+  .experience-role {
+    font-size: 16px;
+  }
+
+  .safari-url-bar {
+    min-width: 0;
+  }
+
+  .safari-url {
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

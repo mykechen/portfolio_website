@@ -1,0 +1,15 @@
+.spotify-playlist-content {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #000000;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.spotify-playlist-content iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

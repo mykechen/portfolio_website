@@ -1,8 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch } from "../../store/hooks";
 import { openWindow } from "../../store/windowManagerSlice";
 import DesktopIcon from "./DesktopIcon";
-import Window from "../Window/Window";
 import Dock from "../Dock/Dock";
 import StickyNote from "./StickyNote";
 import FinderContent from "../Apps/Finder/FinderContent";
@@ -12,7 +11,6 @@ import "./Desktop.css";
 
 const Desktop = () => {
   const dispatch = useAppDispatch();
-  const windows = useAppSelector((state) => state.windowManager.windows);
 
   // Typewriter animation state
   const [headerText, setHeaderText] = useState("");
@@ -197,8 +195,8 @@ const Desktop = () => {
       const aboutGroupId = `about-${Date.now()}`;
 
       // Calculate the centered position for the main text window
-      const aboutWindowWidth = 700;
-      const aboutWindowHeight = 600;
+      const aboutWindowWidth = 550;
+      const aboutWindowHeight = 500;
       const centerX = (window.innerWidth - aboutWindowWidth) / 2;
       const centerY = (window.innerHeight - aboutWindowHeight) / 2;
 
@@ -368,18 +366,6 @@ const Desktop = () => {
           />
         ))}
       </div>
-
-      {windows.map(
-        (window) =>
-          !window.minimized && (
-            <Window
-              key={window.id}
-              id={window.id}
-              title={window.title}
-              content={window.content}
-            />
-          )
-      )}
 
       <Dock />
     </div>

@@ -29,9 +29,12 @@
 }
 
 .mail-folder-icon {
-  font-size: 16px;
+  font-size: 18px;
   width: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #86868b;
 }
 
 .mail-folder-name {
@@ -52,10 +55,31 @@
   border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
   transition: background-color 0.2s;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .mail-item:hover {
   background: #f9f9f9;
+}
+
+.mail-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.mail-unread-dot.visible {
+  background: #007AFF;
+}
+
+.mail-item-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .mail-item-sender {
@@ -81,11 +105,10 @@
 /* Right - Compose Form */
 .mail-compose {
   background: #fafafa;
-  padding: 40px;
+  padding: 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .mail-compose form {
@@ -96,36 +119,42 @@
 
 .mail-form-group {
   position: relative;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .mail-input-icon {
   position: absolute;
-  left: 16px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 16px;
   color: #86868b;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
 
 .mail-input-icon.mail-icon-top {
-  top: 16px;
+  top: 12px;
   transform: none;
 }
 
 .mail-form-group input,
 .mail-form-group textarea {
   width: 100%;
-  padding: 14px 16px 14px 48px;
+  padding: 10px 12px 10px 40px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #ffffff;
-  font-size: 15px;
+  font-size: 14px;
   color: #1d1d1f;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  z-index: 0;
 }
 
 .mail-form-group input:focus,
@@ -142,22 +171,22 @@
 
 .mail-form-group textarea {
   resize: vertical;
-  min-height: 120px;
-  padding-top: 14px;
+  min-height: 80px;
+  padding-top: 10px;
 }
 
 .mail-send-button {
   width: 100%;
-  padding: 14px;
+  padding: 11px;
   background: #007AFF;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 6px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .mail-send-button:hover {
@@ -168,30 +197,18 @@
   transform: scale(0.98);
 }
 
-/* Scrollbar styling */
+/* Hide scrollbars */
+.mail-sidebar,
+.mail-list,
+.mail-compose {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
 .mail-sidebar::-webkit-scrollbar,
 .mail-list::-webkit-scrollbar,
 .mail-compose::-webkit-scrollbar {
-  width: 8px;
-}
-
-.mail-sidebar::-webkit-scrollbar-track,
-.mail-list::-webkit-scrollbar-track,
-.mail-compose::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.mail-sidebar::-webkit-scrollbar-thumb,
-.mail-list::-webkit-scrollbar-thumb,
-.mail-compose::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-}
-
-.mail-sidebar::-webkit-scrollbar-thumb:hover,
-.mail-list::-webkit-scrollbar-thumb:hover,
-.mail-compose::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* Responsive adjustments */

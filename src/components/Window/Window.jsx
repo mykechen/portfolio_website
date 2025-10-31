@@ -67,9 +67,9 @@ const Window = ({ id, title, content }) => {
   if (window.maximized) {
     return (
       <motion.div
-        className={`window maximized ${noTitleBar ? "no-title-bar" : ""}`}
+        className={`window maximized ${noTitleBar ? "no-title-bar" : ""} ${windowType ? `window-${windowType}` : ""}`}
         style={{
-          zIndex: window.zIndex,
+          zIndex: 10001,
         }}
         onClick={handleClick}
         initial={{ scale: 0.9, opacity: 0 }}
@@ -89,13 +89,33 @@ const Window = ({ id, title, content }) => {
           />
         )}
         <div
-          className={`window-content ${windowType ? `window-content-${windowType}` : ""}`}
+          className={`window-content ${
+            windowType ? `window-content-${windowType}` : ""
+          }`}
           onClick={(e) => {
-            // Allow clicks within content to work normally, prevent window focus on content click
-            e.stopPropagation();
+            // Only focus window if clicking on non-interactive elements
+            // Interactive elements (buttons, links, inputs) will naturally stop propagation
+            const target = e.target;
+            const isInteractive =
+              target.tagName === "BUTTON" ||
+              target.tagName === "A" ||
+              target.tagName === "INPUT" ||
+              target.tagName === "TEXTAREA" ||
+              target.tagName === "SELECT" ||
+              target.closest("button, a, input, textarea, select") !== null;
+
+            if (!isInteractive) {
+              handleClick();
+            }
           }}
         >
-          {content}
+          {noTitleBar && React.isValidElement(content)
+            ? React.cloneElement(content, {
+                onClose: handleClose,
+                onMinimize: () => dispatch(minimizeWindow(id)),
+                onMaximize: () => dispatch(maximizeWindow(id)),
+              })
+            : content}
         </div>
       </motion.div>
     );
@@ -108,16 +128,16 @@ const Window = ({ id, title, content }) => {
       onDragStop={handleDragStop}
       onResize={handleResize}
       onResizeStop={handleResizeStop}
-      minWidth={noTitleBar ? window.size.width : 400}
-      minHeight={noTitleBar ? window.size.height : 300}
-      maxWidth={noTitleBar ? window.size.width : undefined}
-      maxHeight={noTitleBar ? window.size.height : undefined}
+      minWidth={noTitleBar && windowType !== "safari" ? window.size.width : 400}
+      minHeight={noTitleBar && windowType !== "safari" ? window.size.height : 300}
+      maxWidth={noTitleBar && windowType !== "safari" ? window.size.width : undefined}
+      maxHeight={noTitleBar && windowType !== "safari" ? window.size.height : undefined}
       style={{ zIndex: window.zIndex }}
-      dragHandleClassName={noTitleBar ? "" : "title-bar"}
-      disableResizing={window.closing || noTitleBar ? true : undefined}
+      dragHandleClassName={noTitleBar ? (windowType === "safari" ? "safari-titlebar" : "") : "title-bar"}
+      disableResizing={window.closing || (noTitleBar && windowType !== "safari") ? true : undefined}
       disableDragging={window.closing ? true : undefined}
       enableResizing={
-        window.closing || noTitleBar
+        window.closing || (noTitleBar && windowType !== "safari")
           ? {}
           : {
               top: true,
@@ -132,7 +152,7 @@ const Window = ({ id, title, content }) => {
       }
     >
       <motion.div
-        className={`window ${noTitleBar ? "no-title-bar" : ""}`}
+        className={`window ${noTitleBar ? "no-title-bar" : ""} ${windowType ? `window-${windowType}` : ""}`}
         onClick={handleClick}
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{
@@ -151,13 +171,33 @@ const Window = ({ id, title, content }) => {
           />
         )}
         <div
-          className={`window-content ${windowType ? `window-content-${windowType}` : ""}`}
+          className={`window-content ${
+            windowType ? `window-content-${windowType}` : ""
+          }`}
           onClick={(e) => {
-            // Allow clicks within content to work normally, prevent window focus on content click
-            e.stopPropagation();
+            // Only focus window if clicking on non-interactive elements
+            // Interactive elements (buttons, links, inputs) will naturally stop propagation
+            const target = e.target;
+            const isInteractive =
+              target.tagName === "BUTTON" ||
+              target.tagName === "A" ||
+              target.tagName === "INPUT" ||
+              target.tagName === "TEXTAREA" ||
+              target.tagName === "SELECT" ||
+              target.closest("button, a, input, textarea, select") !== null;
+
+            if (!isInteractive) {
+              handleClick();
+            }
           }}
         >
-          {content}
+          {noTitleBar && React.isValidElement(content)
+            ? React.cloneElement(content, {
+                onClose: handleClose,
+                onMinimize: () => dispatch(minimizeWindow(id)),
+                onMaximize: () => dispatch(maximizeWindow(id)),
+              })
+            : content}
         </div>
       </motion.div>
     </Rnd>
