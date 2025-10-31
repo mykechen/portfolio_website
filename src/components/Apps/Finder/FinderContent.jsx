@@ -121,14 +121,14 @@ const FinderContent = ({
         name: "Resume_SWE.pdf",
         icon: "/icons/pdf.png",
         type: "link",
-        url: "/resumes/Resume_SWE.pdf",
+        url: "public/Myke Chen Resume SWE.pdf",
       },
       {
-        id: "resume-ds",
-        name: "Resume_DS.pdf",
+        id: "resume-pm",
+        name: "Resume_PM.pdf",
         icon: "/icons/pdf.png",
         type: "link",
-        url: "/resumes/Resume_DS.pdf",
+        url: "public/Myke Chen Resume PM.pdf",
       },
     ],
     easycal: [
