@@ -1,58 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { SiGithub, SiLinkedin, SiInstagram } from "react-icons/si";
+import { MdPhone, MdEmail } from "react-icons/md";
 import "./ContactContent.css";
 
 const ContactContent = () => {
+  const [copiedField, setCopiedField] = useState("");
+
+  const copyToClipboard = (text, field) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(""), 2000);
+  };
+
   return (
     <div className="contact-content">
-      <div className="contact-layout">
-        <div className="contact-left">
-          <h1 className="contact-name">Myke A. Chen</h1>
-          <p className="contact-title">CS and Business @ USC</p>
-
-          <div className="contact-info-grid">
-            <div className="contact-info-item">
-              <p className="contact-label">Phone</p>
-              <p className="contact-value">224 515 0220</p>
-            </div>
-            <div className="contact-info-item">
-              <p className="contact-label">Email</p>
-              <p className="contact-value">mykechen@usc.edu</p>
-            </div>
-          </div>
-
-          <div className="social-icons">
-            <a
-              href="https://www.linkedin.com/in/myke-angelo-chen/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon"
-              aria-label="LinkedIn"
-            >
-              <SiLinkedin />
-            </a>
-            <a
-              href="https://github.com/mykechen"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon"
-              aria-label="GitHub"
-            >
-              <SiGithub />
-            </a>
-            <a
-              href="https://www.instagram.com/mikah_33/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon"
-              aria-label="Instagram"
-            >
-              <SiInstagram />
-            </a>
-          </div>
-        </div>
-
-        <div className="contact-right">
+      <div className="contact-card">
+        <div className="contact-header">
           <div className="profile-picture">
             <img
               src="/images/contact/myke_chen_headshot.jpeg"
@@ -62,6 +25,86 @@ const ContactContent = () => {
                   "https://via.placeholder.com/300?text=Myke+A.+Chen";
               }}
             />
+          </div>
+          <div className="contact-header-text">
+            <h1 className="contact-name">Myke A. Chen</h1>
+            <p className="contact-title">CS, Business, AI @ USC</p>
+          </div>
+        </div>
+
+        <div className="contact-divider"></div>
+
+        <div className="contact-info-section">
+          <p className="section-label">Contacts</p>
+          <div
+            className={`contact-info-item ${
+              copiedField === "phone" ? "copied" : ""
+            }`}
+            onClick={() => copyToClipboard("2245150220", "phone")}
+          >
+            <div className="contact-info-icon phone-icon">
+              <MdPhone />
+            </div>
+            <div className="contact-info-text">
+              <p className="contact-label">Phone</p>
+              <p className="contact-value">224 515 0220</p>
+              {copiedField === "phone" && (
+                <span className="copied-tooltip">Copied!</span>
+              )}
+            </div>
+          </div>
+
+          <div
+            className={`contact-info-item ${
+              copiedField === "email" ? "copied" : ""
+            }`}
+            onClick={() => copyToClipboard("mykechen@usc.edu", "email")}
+          >
+            <div className="contact-info-icon email-icon">
+              <MdEmail />
+            </div>
+            <div className="contact-info-text">
+              <p className="contact-label">Email</p>
+              <p className="contact-value">mykechen@usc.edu</p>
+              {copiedField === "email" && (
+                <span className="copied-tooltip">Copied!</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="contact-divider"></div>
+
+        <div className="social-section">
+          <p className="section-label">Connect</p>
+          <div className="social-icons">
+            <a
+              href="https://www.linkedin.com/in/myke-angelo-chen/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon linkedin"
+              aria-label="LinkedIn"
+            >
+              <SiLinkedin />
+            </a>
+            <a
+              href="https://github.com/mykechen"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon github"
+              aria-label="GitHub"
+            >
+              <SiGithub />
+            </a>
+            <a
+              href="https://www.instagram.com/mikah_33/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon instagram"
+              aria-label="Instagram"
+            >
+              <SiInstagram />
+            </a>
           </div>
         </div>
       </div>

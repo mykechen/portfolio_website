@@ -122,8 +122,8 @@ const Dock = () => {
       label: "Contact",
       action: () => {
         const menuBarHeight = 28;
-        const windowWidth = 600;
-        const windowHeight = 450;
+        const windowWidth = 620;
+        const windowHeight = 560;
 
         dispatch(
           openWindow({
