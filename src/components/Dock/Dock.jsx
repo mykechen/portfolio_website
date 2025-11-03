@@ -12,12 +12,15 @@ import SafariContent from "../Apps/Safari/SafariContent";
 import TrashContent from "../Apps/Trash/TrashContent";
 import "./Dock.css";
 
-const Dock = () => {
+const Dock = ({ hideDockForMobile = false }) => {
   const dispatch = useAppDispatch();
   const windows = useAppSelector((state) => state.windowManager.windows);
 
   // Check if any window is maximized
   const hasMaximizedWindow = windows.some((window) => window.maximized);
+
+  // Hide dock if mobile modal is visible or a window is maximized
+  const shouldHideDock = hideDockForMobile || hasMaximizedWindow;
 
   const dockItems = [
     {
@@ -198,7 +201,7 @@ const Dock = () => {
   ];
 
   return (
-    <div className={`dock ${hasMaximizedWindow ? "dock-hidden" : ""}`}>
+    <div className={`dock ${shouldHideDock ? "dock-hidden" : ""}`}>
       <div className="dock-inner">
         {dockItems.map((item, index) => (
           <React.Fragment key={item.id}>

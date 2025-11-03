@@ -195,8 +195,8 @@ const Desktop = () => {
       // Open 3 image windows from the about folder first
       const aboutImages = [
         "/images/about/image1.jpg",
-        "/images/about/image2.JPG",
         "/images/about/image3.JPG",
+        "/images/about/image2.JPG",
       ];
 
       const imageWindowWidth = 400;
@@ -204,6 +204,10 @@ const Desktop = () => {
       const menuBarHeight = 28;
       const dockHeight = 120;
       const padding = 20;
+
+      // Right image (image2) gets 70% of full height (30% smaller)
+      const fullHeight = window.innerHeight - menuBarHeight - dockHeight - padding * 2;
+      const rightImageHeight = fullHeight * 0.7;
 
       // Calculate positions: 2 images on LEFT, 1 image on RIGHT
       // All must avoid the centered text window
@@ -239,31 +243,29 @@ const Desktop = () => {
         y: leftImage2YFinal,
       };
 
-      // Right side: Position image to the right of the text window, vertically centered
+      // Right side: Position image to the right of the text window, centered vertically
       const rightX = textWindowBounds.right + padding;
-      // Center vertically with the text window
-      const rightY = centerY + (aboutWindowHeight - imageWindowHeight) / 2;
+      const availableHeight = window.innerHeight - menuBarHeight - dockHeight;
+      const rightY = menuBarHeight + (availableHeight - rightImageHeight) / 2;
 
       // Ensure it fits on screen
       const rightXFinal = Math.min(
         rightX,
         window.innerWidth - imageWindowWidth - padding
       );
-      const rightYFinal = Math.max(
-        menuBarHeight + padding,
-        Math.min(
-          rightY,
-          window.innerHeight - dockHeight - imageWindowHeight - padding
-        )
-      );
 
       const position3 = {
         x: rightXFinal,
-        y: rightYFinal,
+        y: rightY,
       };
 
       // Fixed positions array: 2 on left, 1 on right
       const fixedPositions = [position1, position2, position3];
+      const imageSizes = [
+        { width: imageWindowWidth, height: imageWindowHeight },
+        { width: imageWindowWidth, height: imageWindowHeight },
+        { width: imageWindowWidth, height: rightImageHeight },
+      ];
 
       // Open all image windows immediately with fixed positions
       for (let index = 0; index < aboutImages.length; index++) {
@@ -273,7 +275,7 @@ const Desktop = () => {
           openWindow({
             title: imageName,
             content: <ImageViewer imagePath={imagePath} />,
-            size: { width: imageWindowWidth, height: imageWindowHeight },
+            size: imageSizes[index],
             position: fixedPositions[index],
             groupId: aboutGroupId,
           })
