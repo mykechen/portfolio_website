@@ -116,8 +116,8 @@ const MenuBar = () => {
           className="menu-item"
           onClick={() => {
             const menuBarHeight = 28;
-            const windowWidth = 600;
-            const windowHeight = 450;
+            const windowWidth = 620;
+            const windowHeight = 560;
 
             dispatch(
               openWindow({
